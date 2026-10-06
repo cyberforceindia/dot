@@ -1,0 +1,90 @@
+<%@ Page Language="C#" AutoEventWireup="true"
+    CodeBehind="Default.aspx.cs"
+    Inherits="WebApplication1.Default" %>
+
+<!DOCTYPE html>
+
+<html>
+<head runat="server">
+    <title>Web Form Controls</title>
+</head>
+
+<body>
+<form id="form1" runat="server">
+
+    <h2>Student Information</h2>
+
+    <!-- DropDownList -->
+    Select Course:
+
+    <asp:DropDownList ID="ddlCourse" runat="server">
+        <asp:ListItem>Select Course</asp:ListItem>
+        <asp:ListItem>MCA</asp:ListItem>
+        <asp:ListItem>BCA</asp:ListItem>
+        <asp:ListItem>MBA</asp:ListItem>
+    </asp:DropDownList>
+
+    <br /><br />
+
+    <!-- RadioButtonList -->
+    Select Gender:
+
+    <asp:RadioButtonList ID="rblGender" runat="server">
+        <asp:ListItem>Male</asp:ListItem>
+        <asp:ListItem>Female</asp:ListItem>
+    </asp:RadioButtonList>
+
+    <!-- CheckBoxList -->
+    Select Skills:
+
+    <asp:CheckBoxList ID="cblSkills" runat="server">
+        <asp:ListItem>Java</asp:ListItem>
+        <asp:ListItem>Python</asp:ListItem>
+        <asp:ListItem>ASP.NET</asp:ListItem>
+    </asp:CheckBoxList>
+
+    <br />
+
+    <asp:Button ID="Button1" runat="server"
+        Text="Submit"
+        OnClick="Button1_Click" />
+
+    <br /><br />
+
+    <asp:Label ID="Label1" runat="server"
+        ForeColor="Green">
+    </asp:Label>
+
+</form>
+</body>
+</html>
+
+  using System;
+
+namespace WebApplication1
+{
+    public partial class Default : System.Web.UI.Page
+    {
+        protected void Button1_Click(object sender, EventArgs e)
+        {
+            string course = ddlCourse.SelectedItem.Text;
+            string gender = rblGender.SelectedItem.Text;
+
+            string skills = "";
+
+            // Get selected skills
+            foreach (System.Web.UI.WebControls.ListItem item
+                     in cblSkills.Items)
+            {
+                if (item.Selected)
+                {
+                    skills += item.Text + " ";
+                }
+            }
+
+            Label1.Text = "Course: " + course
+                        + "<br/>Gender: " + gender
+                        + "<br/>Skills: " + skills;
+        }
+    }
+}
