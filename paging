@@ -1,0 +1,134 @@
+<%@ Page Language="C#" AutoEventWireup="true"
+    CodeBehind="Default.aspx.cs"
+    Inherits="WebApplication1.Default" %>
+
+<!DOCTYPE html>
+
+<html>
+<head runat="server">
+    <title>GridView Example</title>
+</head>
+
+<body>
+
+<form id="form1" runat="server">
+
+    <h2>Student Details</h2>
+
+    <!-- Filtering -->
+    Search Name:
+
+    <asp:TextBox ID="txtSearch" runat="server">
+    </asp:TextBox>
+
+    <asp:Button ID="btnSearch" runat="server"
+        Text="Search"
+        OnClick="btnSearch_Click" />
+
+    <br /><br />
+
+    <!-- GridView -->
+    <asp:GridView ID="GridView1" runat="server"
+        AutoGenerateColumns="true"
+        AllowPaging="true"
+        PageSize="2"
+        AllowSorting="true"
+        OnPageIndexChanging="GridView1_PageIndexChanging"
+        OnSorting="GridView1_Sorting">
+
+    </asp:GridView>
+
+</form>
+
+</body>
+
+using System;
+using System.Data;
+using System.Linq;
+
+namespace WebApplication1
+{
+    public partial class Default : System.Web.UI.Page
+    {
+        protected void Page_Load(object sender, EventArgs e)
+        {
+            if (!IsPostBack)
+            {
+                BindGrid();
+            }
+        }
+
+        // Create and bind data
+        void BindGrid()
+        {
+            DataTable dt = new DataTable();
+
+            dt.Columns.Add("ID");
+            dt.Columns.Add("Name");
+            dt.Columns.Add("Course");
+            dt.Columns.Add("Marks");
+
+            dt.Rows.Add("1", "Rahul", "MCA", "85");
+            dt.Rows.Add("2", "Amit", "BCA", "72");
+            dt.Rows.Add("3", "Priya", "MCA", "91");
+            dt.Rows.Add("4", "Sneha", "MBA", "78");
+            dt.Rows.Add("5", "Rohit", "MCA", "88");
+
+            GridView1.DataSource = dt;
+            GridView1.DataBind();
+
+            // Store data in ViewState
+            ViewState["Data"] = dt;
+        }
+
+        // -----------------------------
+        // PAGING
+        // -----------------------------
+        protected void GridView1_PageIndexChanging(
+            object sender,
+            System.Web.UI.WebControls.GridViewPageEventArgs e)
+        {
+            GridView1.PageIndex = e.NewPageIndex;
+
+            DataTable dt = (DataTable)ViewState["Data"];
+
+            GridView1.DataSource = dt;
+            GridView1.DataBind();
+        }
+
+        // -----------------------------
+        // SORTING
+        // -----------------------------
+        protected void GridView1_Sorting(
+            object sender,
+            System.Web.UI.WebControls.GridViewSortEventArgs e)
+        {
+            DataTable dt = (DataTable)ViewState["Data"];
+
+            DataView dv = dt.DefaultView;
+
+            dv.Sort = e.SortExpression + " ASC";
+
+            GridView1.DataSource = dv;
+            GridView1.DataBind();
+        }
+
+        // -----------------------------
+        // FILTERING
+        // -----------------------------
+        protected void btnSearch_Click(object sender, EventArgs e)
+        {
+            DataTable dt = (DataTable)ViewState["Data"];
+
+            DataView dv = dt.DefaultView;
+
+            dv.RowFilter = "Name LIKE '%"
+                        + txtSearch.Text
+                        + "%'";
+
+            GridView1.DataSource = dv;
+            GridView1.DataBind();
+        }
+    }
+}
+</html>
