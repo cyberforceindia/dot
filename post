@@ -1,0 +1,77 @@
+<%@ Page Language="C#" AutoEventWireup="true"
+    CodeBehind="Default.aspx.cs"
+    Inherits="WebApplication1.Default" %>
+
+<!DOCTYPE html>
+
+<html>
+<head runat="server">
+    <title>PostBack and ViewState</title>
+</head>
+<body>
+
+<form id="form1" runat="server">
+
+    <h3>PostBack and ViewState Example</h3>
+
+    <asp:Label ID="Label1" runat="server"
+        Text="Enter Name: ">
+    </asp:Label>
+
+    <asp:TextBox ID="TextBox1" runat="server">
+    </asp:TextBox>
+
+    <br /><br />
+
+    <asp:Label ID="Label2" runat="server">
+    </asp:Label>
+
+    <br /><br />
+
+    <asp:Button ID="Button1" runat="server"
+        Text="Submit"
+        OnClick="Button1_Click" />
+
+    <asp:Button ID="Button2" runat="server"
+        Text="PostBack"
+        OnClick="Button2_Click" />
+
+</form>
+
+</body>
+</html>
+
+
+
+
+using System;
+
+namespace WebApplication1
+{
+    public partial class Default : System.Web.UI.Page
+    {
+        protected void Button1_Click(object sender, EventArgs e)
+        {
+            // Store textbox value in ViewState
+            ViewState["Name"] = TextBox1.Text;
+
+            Label2.Text = "Name saved in ViewState: "
+                        + ViewState["Name"];
+        }
+
+        protected void Button2_Click(object sender, EventArgs e)
+        {
+            // This button causes a PostBack
+
+            if (ViewState["Name"] != null)
+            {
+                Label2.Text = "After PostBack, ViewState value: "
+                            + ViewState["Name"];
+            }
+            else
+            {
+                Label2.Text = "No value stored in ViewState.";
+            }
+        }
+    }
+}
