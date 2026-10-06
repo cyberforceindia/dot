@@ -1,0 +1,136 @@
+<%@ Page Language="C#" AutoEventWireup="true"
+    CodeBehind="Default.aspx.cs"
+    Inherits="WebApplication1.Default" %>
+
+<!DOCTYPE html>
+
+<html>
+<head runat="server">
+    <title>DataGrid Editing</title>
+</head>
+
+<body>
+
+<form id="form1" runat="server">
+
+    <h2>DataGrid Editing Example</h2>
+
+    <asp:DataGrid ID="DataGrid1" runat="server"
+        AutoGenerateColumns="false"
+        OnEditCommand="DataGrid1_EditCommand"
+        OnUpdateCommand="DataGrid1_UpdateCommand"
+        OnCancelCommand="DataGrid1_CancelCommand">
+
+        <Columns>
+
+            <asp:BoundColumn
+                DataField="ID"
+                HeaderText="ID" />
+
+            <asp:BoundColumn
+                DataField="Name"
+                HeaderText="Name" />
+
+            <asp:BoundColumn
+                DataField="Course"
+                HeaderText="Course" />
+
+            <asp:EditCommandColumn
+                EditText="Edit"
+                UpdateText="Update"
+                CancelText="Cancel" />
+
+        </Columns>
+
+    </asp:DataGrid>
+
+</form>
+
+</body>
+using System;
+using System.Data;
+
+namespace WebApplication1
+{
+    public partial class Default : System.Web.UI.Page
+    {
+        protected void Page_Load(object sender, EventArgs e)
+        {
+            if (!IsPostBack)
+            {
+                BindGrid();
+            }
+        }
+
+        // Create data and bind it to DataGrid
+        void BindGrid()
+        {
+            DataTable dt = new DataTable();
+
+            dt.Columns.Add("ID");
+            dt.Columns.Add("Name");
+            dt.Columns.Add("Course");
+
+            dt.Rows.Add("1", "Rahul", "MCA");
+            dt.Rows.Add("2", "Amit", "BCA");
+            dt.Rows.Add("3", "Priya", "MCA");
+
+            // Store data in ViewState
+            ViewState["Data"] = dt;
+
+            DataGrid1.DataSource = dt;
+            DataGrid1.DataBind();
+        }
+
+        // Click Edit
+        protected void DataGrid1_EditCommand(
+            object source,
+            System.Web.UI.WebControls.DataGridCommandEventArgs e)
+        {
+            DataGrid1.EditItemIndex = e.Item.ItemIndex;
+
+            DataGrid1.DataSource = ViewState["Data"];
+            DataGrid1.DataBind();
+        }
+
+        // Click Update
+        protected void DataGrid1_UpdateCommand(
+            object source,
+            System.Web.UI.WebControls.DataGridCommandEventArgs e)
+        {
+            DataTable dt = (DataTable)ViewState["Data"];
+
+            // Get edited values
+            string name =
+                ((System.Web.UI.WebControls.TextBox)e.Item.Cells[1].Controls[0]).Text;
+
+            string course =
+                ((System.Web.UI.WebControls.TextBox)e.Item.Cells[2].Controls[0]).Text;
+
+            // Update row
+            int index = e.Item.ItemIndex;
+
+            dt.Rows[index]["Name"] = name;
+            dt.Rows[index]["Course"] = course;
+
+            ViewState["Data"] = dt;
+
+            DataGrid1.EditItemIndex = -1;
+
+            DataGrid1.DataSource = dt;
+            DataGrid1.DataBind();
+        }
+
+        // Click Cancel
+        protected void DataGrid1_CancelCommand(
+            object source,
+            System.Web.UI.WebControls.DataGridCommandEventArgs e)
+        {
+            DataGrid1.EditItemIndex = -1;
+
+            DataGrid1.DataSource = ViewState["Data"];
+            DataGrid1.DataBind();
+        }
+    }
+}
+</html>
