@@ -1,0 +1,98 @@
+<%@ Page Language="C#" AutoEventWireup="true"
+    CodeBehind="Default.aspx.cs"
+    Inherits="WebApplication1.Default" %>
+
+<!DOCTYPE html>
+
+<html>
+<head runat="server">
+    <title>Data Binding</title>
+</head>
+
+<body>
+<form id="form1" runat="server">
+
+    <h2>Data Binding Example</h2>
+
+    <h3>Hashtable</h3>
+
+    <asp:DropDownList ID="ddlHashtable" runat="server">
+    </asp:DropDownList>
+
+    <h3>ArrayList</h3>
+
+    <asp:DropDownList ID="ddlArrayList" runat="server">
+    </asp:DropDownList>
+
+    <h3>DataTable</h3>
+
+    <asp:GridView ID="GridView1" runat="server">
+    </asp:GridView>
+
+</form>
+</body>
+</html>
+
+using System;
+using System.Collections;
+using System.Data;
+
+namespace WebApplication1
+{
+    public partial class Default : System.Web.UI.Page
+    {
+        protected void Page_Load(object sender, EventArgs e)
+        {
+            if (!IsPostBack)
+            {
+                // -----------------------------
+                // 1. Hashtable Data Binding
+                // -----------------------------
+
+                Hashtable ht = new Hashtable();
+
+                ht.Add("1", "MCA");
+                ht.Add("2", "BCA");
+                ht.Add("3", "MBA");
+
+                ddlHashtable.DataSource = ht;
+                ddlHashtable.DataTextField = "Value";
+                ddlHashtable.DataValueField = "Key";
+                ddlHashtable.DataBind();
+
+
+                // -----------------------------
+                // 2. ArrayList Data Binding
+                // -----------------------------
+
+                ArrayList list = new ArrayList();
+
+                list.Add("Java");
+                list.Add("Python");
+                list.Add("ASP.NET");
+                list.Add("C#");
+
+                ddlArrayList.DataSource = list;
+                ddlArrayList.DataBind();
+
+
+                // -----------------------------
+                // 3. DataTable Data Binding
+                // -----------------------------
+
+                DataTable dt = new DataTable();
+
+                dt.Columns.Add("ID");
+                dt.Columns.Add("Name");
+                dt.Columns.Add("Course");
+
+                dt.Rows.Add("1", "Rahul", "MCA");
+                dt.Rows.Add("2", "Amit", "BCA");
+                dt.Rows.Add("3", "Priya", "MCA");
+
+                GridView1.DataSource = dt;
+                GridView1.DataBind();
+            }
+        }
+    }
+}
