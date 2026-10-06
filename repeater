@@ -1,0 +1,91 @@
+<%@ Page Language="C#" AutoEventWireup="true"
+    CodeBehind="Default.aspx.cs"
+    Inherits="WebApplication1.Default" %>
+
+<!DOCTYPE html>
+
+<html>
+<head runat="server">
+    <title>Repeater Control</title>
+</head>
+
+<body>
+
+<form id="form1" runat="server">
+
+    <h2>Student Details</h2>
+
+    <asp:Repeater ID="Repeater1" runat="server">
+
+        <!-- Header Template -->
+        <HeaderTemplate>
+            <table border="1" cellpadding="10">
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Course</th>
+                </tr>
+        </HeaderTemplate>
+
+        <!-- Item Template -->
+        <ItemTemplate>
+            <tr>
+                <td><%# Eval("ID") %></td>
+                <td><%# Eval("Name") %></td>
+                <td><%# Eval("Course") %></td>
+            </tr>
+        </ItemTemplate>
+
+        <!-- Alternating Item Template -->
+        <AlternatingItemTemplate>
+            <tr>
+                <td><%# Eval("ID") %></td>
+                <td><%# Eval("Name") %></td>
+                <td><%# Eval("Course") %></td>
+            </tr>
+        </AlternatingItemTemplate>
+
+        <!-- Footer Template -->
+        <FooterTemplate>
+            </table>
+        </FooterTemplate>
+
+    </asp:Repeater>
+
+</form>
+
+</body>
+
+using System;
+using System.Data;
+
+namespace WebApplication1
+{
+    public partial class Default : System.Web.UI.Page
+    {
+        protected void Page_Load(object sender, EventArgs e)
+        {
+            if (!IsPostBack)
+            {
+                // Create DataTable
+                DataTable dt = new DataTable();
+
+                // Create columns
+                dt.Columns.Add("ID");
+                dt.Columns.Add("Name");
+                dt.Columns.Add("Course");
+
+                // Add data
+                dt.Rows.Add("1", "Rahul", "MCA");
+                dt.Rows.Add("2", "Amit", "BCA");
+                dt.Rows.Add("3", "Priya", "MCA");
+                dt.Rows.Add("4", "Sneha", "MBA");
+
+                // Bind data to Repeater
+                Repeater1.DataSource = dt;
+                Repeater1.DataBind();
+            }
+        }
+    }
+}
+</html>
